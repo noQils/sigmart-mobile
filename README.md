@@ -30,7 +30,7 @@ Semua variabel state yang dideklarasikan dalam kelas State dari sebuah StatefulW
     4. Melakukan `git init`, `git add`, `git commit`.
     5. Meng-*clone* repositori github yang sudah dibuat dalam `root directory` proyek sigmart.
 * **Checklist 2:**
-    1. Mmebuat file baru bernama `menu.dart` dalam direktori `sigmart/lib/` dan edit file tersebut.
+    1. Membuat file baru bernama `menu.dart` dalam direktori `sigmart/lib/` dan edit file tersebut.
     2. Menambahkan class `Myhomepage` yang berisi konten-konten yang akan ditampilkan dalam *homepage* ketika program di jalankan.
     3. Menambahkan class `ItemHomepage` sebagai objek *item* (*button*) yang diatmpilkan pada *homepage*.
     4. Menambahkan class `ItemClass` untuk membuat kartu yang memberikan menampilkan *button*.
@@ -130,3 +130,147 @@ Navigator.pushReplacement(
     ),
 );
 ```
+
+## Jawaban Pertanyaan Tugas 8  
+***1. Jelaskan mengapa kita perlu membuat model untuk melakukan pengambilan ataupun pengiriman data JSON? Apakah akan terjadi error jika kita tidak membuat model terlebih dahulu?***  
+Dalam Flutter, model membantu kita melakukan parsing data JSON menjadi objek Dart dan sebaliknya, sehingga mempermudah proses deserialisasi dan serialisasi. Dengan model, kita juga dapat memvalidasi tipe data dari JSON, memastikan setiap field memiliki tipe yang benar dan menghindari kesalahan tipe data yang dapat menyebabkan error saat runtime. Selain itu, model membuat kode lebih mudah dipelihara dan scalable ketika struktur JSON berubah, kita hanya perlu memperbarui model tersebut, tanpa harus mengubah seluruh kode yang terkait. Jika kita tidak menggunakan model, meskipun Flutter tidak langsung error, kita berisiko menghadapi error runtime, terutama ketika ada ketidaksesuaian tipe data atau field JSON yang tidak sesuai, yang membuat aplikasi menjadi kurang stabil dan sulit dikelola.
+
+***2. Jelaskan fungsi dari library http yang sudah kamu implementasikan pada tugas ini***  
+Dalam Django, `JsonResponse` dari library `django.http` berfungsi untuk mengirimkan respons HTTP dalam format JSON, yang berguna saat kita ingin aplikasi Django mengembalikan data JSON, misalnya untuk aplikasi berbasis API atau AJAX. Dengan menggunakan `JsonResponse`, kita dapat mengirim data Python (seperti dictionary atau list) yang secara otomatis dikonversi menjadi JSON, sehingga memudahkan integrasi antara backend Django dan frontend berbasis JavaScript. Ini juga mendukung pengaturan status kode HTTP dan pengaturan header untuk respons, membuatnya lebih fleksibel dalam menangani berbagai jenis permintaan data dari klien. Selain itu, `JsonResponse` juga memiliki parameter `safe`, yang secara default diatur ke `True` untuk memastikan bahwa hanya dictionary yang bisa dikonversi menjadi JSON demi keamanan, namun bisa disetel ke `False` jika ingin mengirimkan tipe data lainnya seperti list atau array JSON.
+
+Adapun library `http` dalam Flutter berfungsi sebagai alat untuk mengelola komunikasi antara aplikasi Flutter dan server melalui protokol HTTP. Dengan library ini, kita dapat melakukan berbagai permintaan HTTP seperti `GET`, `POST`, `PUT`, `DELETE`, dan lainnya, yang memungkinkan aplikasi untuk mengambil atau mengirim data ke API atau server web. Setelah kita menambahkan library ini dengan perintah `flutter pub add http`, kita bisa dengan mudah melakukan pengambilan data dari internet atau mengirim data dari aplikasi ke server. Misalnya, dalam aplikasi yang memerlukan data dari API publik seperti data cuaca atau berita, `http` memfasilitasi proses pengambilan data tersebut dan memberikan hasil dalam bentuk JSON, yang kemudian dapat kita kelola dengan model data dalam aplikasi. Selain itu, library ini juga mendukung pengaturan header, parameter, dan autentikasi dalam permintaan HTTP, sehingga cocok untuk membangun aplikasi yang membutuhkan integrasi API secara dinamis dan aman.
+
+***3. Jelaskan fungsi dari `CookieRequest` dan jelaskan mengapa instance `CookieRequest` perlu untuk dibagikan ke semua komponen di aplikasi Flutter.***  
+`CookieRequest` dalam aplikasi Flutter berfungsi untuk menangani manajemen cookie pada permintaan HTTP, terutama saat berinteraksi dengan server yang membutuhkan otentikasi atau sesi pengguna yang persisten. Dengan `CookieRequest`, aplikasi dapat menyimpan dan mengirimkan cookie yang diterima dari server dalam setiap permintaan HTTP selanjutnya, sehingga pengguna tetap terautentikasi dan dapat mengakses sumber daya terbatas tanpa perlu login ulang. Membagikan instance `CookieRequest` ke seluruh komponen aplikasi sangat penting agar setiap bagian dari aplikasi, seperti halaman atau widget yang membutuhkan data pengguna atau akses tertentu, dapat melakukan permintaan HTTP dengan menggunakan cookie yang sama. Ini memastikan bahwa sesi pengguna tetap konsisten di seluruh aplikasi, memungkinkan pengalaman pengguna yang lebih lancar dan mengurangi risiko kesalahan otentikasi yang dapat terjadi jika setiap permintaan HTTP dikelola dengan cookie yang berbeda atau terpisah.
+
+***4. Jelaskan mekanisme pengiriman data mulai dari input hingga dapat ditampilkan pada Flutter.***  
+Mekanisme pengiriman data dalam Flutter dimulai dengan pengguna memasukkan data ke dalam form atau input widget, seperti `TextField`, yang mengumpulkan data dalam variabel atau model data Dart. Setelah pengguna mengirim data (misalnya dengan menekan tombol submit), aplikasi memproses data ini dan mengirimkannya ke server melalui permintaan HTTP, biasanya menggunakan library seperti `http`. Data tersebut dikirim dalam format tertentu, seperti JSON, agar server dapat memprosesnya. Server kemudian menerima, memvalidasi, dan mengolah data tersebut, lalu mengirimkan respons kembali ke aplikasi Flutter seringkali dalam format JSON. Setelah respons diterima, aplikasi melakukan parsing (mengurai) JSON menjadi objek Dart yang dapat dibaca dan ditampilkan. Terakhir, data yang sudah terurai ini ditampilkan pada widget Flutter untuk memberikan umpan balik atau informasi kepada pengguna, melengkapi siklus pengiriman dan penerimaan data secara mulus dalam aplikasi.
+
+***4. Jelaskan mekanisme autentikasi dari login, register, hingga logout. Mulai dari input data akun pada Flutter ke Django hingga selesainya proses autentikasi oleh Django dan tampilnya menu pada Flutter.***  
+Mekanisme autentikasi dalam aplikasi ini dimulai dengan pengguna memasukkan data akun di aplikasi Flutter pada halaman login atau register. Pada halaman login, pengguna memasukkan username dan password, yang kemudian dikirim ke server Django melalui endpoint `/auth/login/` menggunakan metode POST. Di server Django, data login ini diverifikasi melalui fungsi `authenticate();` jika data valid, server akan menjalankan `auth_login()` untuk mencatat sesi pengguna dan mengembalikan respons JSON berisi pesan sukses, status `True`, dan username pengguna. Flutter menerima respons ini dan, jika login berhasil, menavigasi pengguna ke halaman menu utama (`MyHomePage`) sambil menampilkan pesan sambutan. Jika pengguna tidak memiliki akun, mereka dapat menggunakan halaman register, di mana data username, password, dan konfirmasi password dikirim ke endpoint `/auth/register/`. Django memvalidasi kecocokan password dan ketersediaan username, jika valid, server membuat akun baru dan mengirim respons sukses ke Flutter. Untuk logout, pengguna memilih opsi logout di Flutter, yang mengirim permintaan ke endpoint `/auth/logout/`. Django menjalankan `auth_logout()` untuk menghapus sesi pengguna dan mengembalikan pesan logout yang berhasil, setelah itu Flutter mengarahkan kembali ke halaman login, menyelesaikan proses autentikasi secara lengkap.
+
+
+***5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step!***  
+* **Checklist 1:**
+    1. Memastikan deployment django sudah berjalan dengan baik.
+* **Checklist 2:**
+    1. Mengintegrasikan sistem autentikasi dalam proyek Django.
+    2. Membuat app baru bernama `authentication` dalam proyek Django dnegan menjalankan command `python manage.py startapp authentication` pada *root directory* proyek Django.
+    3. Menambahkan `authentication` ke `INSTALLED_APPS` pada *main project* `settings.py` aplikasi Django.
+    4. Menginstall `django-cors-headers` pada *virtual environment* dengan perintah `pip install django-cors-headers` dan menambahkan `django-cors-headers` ke `requirements.txt`.
+    5. Menambahkan `corsheaders` ke `INSTALLED_APPS` pada main project `settings.py` aplikasi Django.
+    6. Menambahkan `corsheaders.middleware.CorsMiddleware` ke `MIDDLEWARE` pada main project `settings.py` aplikasi Django.
+    7. Menambahkan variabel berikut ini pada main project `settings.py` aplikasi Django:
+        ```
+        CORS_ALLOW_ALL_ORIGINS = True
+        CORS_ALLOW_CREDENTIALS = True
+        CSRF_COOKIE_SECURE = True
+        SESSION_COOKIE_SECURE = True
+        CSRF_COOKIE_SAMESITE = 'None'
+        SESSION_COOKIE_SAMESITE = 'None'
+        ```
+    8. Membuat metode view untuk login, register, dan logout pada file `views.py` dalam aplikasi `authentication`.
+    9. Membuat file `urls.py` baru dalam direktori aplikasi `authentication`.
+    10. Menambahkan routing metode login, register, dan logout yang telah dibuat di `views.py`.
+* **Checklist 3:**
+    1. Membuat file `login.dart` pada direktori `screens`.
+    2. Mengisi file dart untuk tampilan halaman login serta mengimplementasikan *logic* pengiriman data untuk login.
+* **Checklist 4:**
+    1. Menambahkan host `"10.0.2.2"` pada list `ALLOWED_HOST` yang berada dalam `settings.py` aplikasi Django.
+* **Checklist 5:**
+    1. Bukalah endpoint JSON yang sudah pada aplikasi Django.
+    2. Menyalin data JSON dan buka situs web Quicktype.
+    3. Pada situs web Quicktype, mengubah *setup name* menjadi ProductEntry, *source type* menjadi JSON, dan *language* menjadi Dart.
+    4. Tempel data JSON yang telah disalin sebelumnya ke dalam *textbox* yang tersedia pada Quicktype.
+    5. Mengklik pilihan *Copy Code* pada Quicktype.
+    6. Membuat direktori baru bernama `models` dalam direktori `lib` pada proyek Flutter.
+    7. Dalam direktori `models` yang baru dibuat, buat file dart bernama `product_entry.dart` yang berfungsi sebagai model kustom pada Flutter.
+    8. Tempel kode yang tadi sudah disalin dari situs web QuickType ke dalam file `product_entry.dart`.
+* **Checklist 6:**
+    1. Pada direktori `screens`, buat file bernama `list_productentry.dart`.
+    2. Mengimplementasikan penampilan produk-produk dalam file `list_productentry.dart` lengkap dengan semua detail dari setiap produk (nama produk, deskripsi, harga, *rating*, dan tanggal ditambahkan):
+        ```
+        children: [
+          Text(
+              "${snapshot.data![index].fields.productName}",
+              style: const TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text("Desciription: ${snapshot.data![index].fields.description}"),
+            const SizedBox(height: 10),
+            Text("Price: ${snapshot.data![index].fields.price}"),
+            const SizedBox(height: 10),
+            Text("Rating: ${snapshot.data![index].fields.rating}"),
+            const SizedBox(height: 10),
+            Text("Date Added: ${snapshot.data![index].fields.date}"),
+        ],
+        ```
+* **Checklist 7:**
+    1. Membuat file `product_detail.dart` pada direktori `screens`
+    2. Modifikasi file tersebut untuk menampilkan detail produk dari barang yang diklik pada halaman *list* produk
+    3. Modifikasi file `list_productentry.dart` sehingga menampilkan halaman detail produk ketika salah satu produk diklik:
+        ```
+        return ListView.builder(
+          itemCount: snapshot.data!.length,
+          itemBuilder: (_, index) {
+            final product = snapshot.data![index];
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProductDetailPage(product: product),
+                  ),
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.fields.productName,
+                      style: const TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text("Description: ${product.fields.description}"),
+                    const SizedBox(height: 10),
+                    Text("Price: ${product.fields.price}"),
+                    const SizedBox(height: 10),
+                    Text("Rating: ${product.fields.rating}"),
+                    const SizedBox(height: 10),
+                    Text("Date Added: ${product.fields.date}"),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+        ```
+* **Checklist 8:**
+    1. Pada file `list_productentry.dart`, menambahkan potongan kode berikut agar produk yang ditampilkan hanyalah produk-produk dari *user* yang sedang login:
+        ```
+        Future<List<ProductEntry>> fetchProduct(CookieRequest request) async {
+          final response = await request.get('http://127.0.0.1:8000/json/');
+          
+          // Melakukan decode response menjadi bentuk json
+          var data = response;
+          
+          // Melakukan konversi data json menjadi object ProductEntry
+          List<ProductEntry> listProduct = [];
+          for (var d in data) {
+            if (d != null) {
+              listProduct.add(ProductEntry.fromJson(d));
+            }
+          }
+          return listProduct;
+        }
+        ```
